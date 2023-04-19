@@ -1,0 +1,28 @@
+{% extends 'learning_logs/base.html' %}
+
+{% block page_header %}
+  <h3>{{ topic }}</h3>
+{% endblock page_header %}
+
+{% block content %}
+  <p><h4>
+      <a class="btn btn-primary" href="{% url 'learning_logs:new_entry' topic.id %}"
+          role="button">Add new entry +</a>
+  </h4></p>
+  
+  {% for entry in entries %}
+    <div class="card mb-3">
+        <h5 class="card-header">
+            {{ entry.date_added|date:'M d, Y H:i' }}
+            <small><a href="{% url 'learning_logs:edit_entry' entry.id %}">
+                edit entry</a></small>
+        </h5>
+        <div class="card-body"><h6>
+            {{ entry.text|linebreaks }}
+        </h6></div>
+    </div>
+  {% empty %}
+    <p>There are no entries for this topic yet.</p>
+  {% endfor %}
+  
+{% endblock content %}
