@@ -134,11 +134,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = 'users:login'
 
 # Настройки Heroku
-import os
 import django_heroku
 django_heroku.settings(locals())
 
-if os.environ.get('DEBUG') == 'TRUE':
-    DEBUG = False
-elif os.environ.get('DEBUG') == 'FALSE':
+    # Хостом проекта может быть только Heroku
+    ALLOWED_HOSTS = ['learning-logs.herokuapp.com']
+
     DEBUG = False
