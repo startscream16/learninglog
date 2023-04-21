@@ -142,5 +142,5 @@ if os.environ.get('DEBUG') == 'TRUE':
     DEBUG = True
 elif os.environ.get('DEBUG') == 'FALSE':
     DEBUG = False
-elif os.enviton.get('DEBUG') == None:
+elif os.environ.get('DEBUG') == None:
     DEBUG = False
