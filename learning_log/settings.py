@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -134,11 +135,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = 'users:login'
 
 # Настройки Heroku
-import os
 import django_heroku
 django_heroku.settings(locals())
 
-if DEBUG == os.environ['DEBUG_VALUE'] == 'TRUE':
+if os.environ.get('DEBUG') == 'TRUE':
     DEBUG = True
-elif DEBUG == os.environ['DEBUG_VALUE'] == 'FALSE':
+elif os.environ.get('DEBUG') == 'FALSE':
     DEBUG = False
