@@ -137,7 +137,7 @@ LOGIN_URL = 'users:login'
 import django_heroku
 django_heroku.settings(locals())
 
-    # Хостом проекта может быть только Heroku
-    ALLOWED_HOSTS = ['learning-logs.herokuapp.com']
+# Хостом проекта может быть только Heroku
+ALLOWED_HOSTS = ['learning-logs.herokuapp.com']
 
-    DEBUG = False
+DEBUG = False
