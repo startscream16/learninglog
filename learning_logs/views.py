@@ -9,23 +9,47 @@ def index(request):
     """Домашняя страница приложения Learning Log"""
     return render(request, 'learning_logs/index.html')
 
-@login_required
 def topics(request):
-    """Выводит список тем"""
-    topics = Topic.objects.filter(owner=request.user).order_by('date_added')
-    context = {'topics': topics}
+    """
+    Показать все темы текущего пользователя и общедоступные темы,
+    принадлежащие другим пользователям
+    """
+    # Если пользователь вошел в систему, мы получаем все его темы и все
+    # общедоступные темы от других пользователей
+    if request.user.is_authenticated:
+        topics = Topic.objects.filter(owner=request.user).order_by('date_added')
+        # Получить все общедоступные темы, не принадлежащие текущемы пользователю
+        public_topics = (Topic.objects
+            .filter(public=True)
+            .exclude(owner=request.user)
+            .order_by('date_added'))
+    else:
+        # Пользователь не аутентифицирован; вернуть все публичные темы
+        topics = None
+        public_topics = Topic.objects.filter(public=True).order_by('date_added')
+    
+    context = {'topics': topics, 'public_topics': public_topics}
     return render(request, 'learning_logs/topics.html', context)
-
-@login_required    
+  
 def topic(request, topic_id):
     """Выводит одну тему и все ее записи"""
-    topic = get_object_or_404(Topic, id=topic_id)
-    # Проверка того, что тема принадлежит текущему пользователю
-    check_topic_owner(topic, request.user)
+    topic = Topic.objects.get(id=topic_id)
+    
+    # Мы хотим показываеть ссылки new_entry и edit_entry только в том случае,
+    # если текущий пользователь владеет темой
+    is_owner = False
+    if request.user == topic.owner:
+        is_owner = True
+    
+    # Если тема принадлежит кому-то другому и не является общедоступной, то 
+    # показать страницу с ошибкой 404
+    if (topic.owner != request.user) and (not topic.public):
+        raise Http404
+        
     entries = topic.entry_set.order_by('-date_added')
-    context = {'topic': topic, 'entries': entries}
+    context = {'topic': topic, 'entries': entries, 'is_owner': is_owner}
     return render(request, 'learning_logs/topic.html', context)
-
+        
 @login_required
 def new_topic(request):
     """Добавляет новую тему"""
