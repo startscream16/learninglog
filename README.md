@@ -11,4 +11,4 @@ Demonstrated ability to work with git, as well as the ability to deploy a projec
 
 This project was originally deployed on Heroku. Now the project is currently deployed on Yandex Cloud.
 
-Link to Learning Log web app: http://158.160.119.70/
+Link to Learning Log web app: http://www.learninglog.ru/
